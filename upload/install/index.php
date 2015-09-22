@@ -120,13 +120,21 @@ function test_pass_length() {
 }
 
 </script>
-<script type="text/javascript" src="https://raw.githubusercontent.com/LEPTON-project/LEPTON_2/master/upload/modules/lib_jquery/jquery-core/jquery-core.min.js"></script>
-<script type="text/javascript" src="https://raw.githubusercontent.com/LEPTON-project/LEPTON_2/master/upload/modules/lib_jquery/jquery-core/jquery-migrate.min.js"></script>
+<?php
+/**
+ *	Keep in mind that we have the modules right here in the installation!
+ * 	So there is no need to load them from the git-server!
+ *	Some browsers, e.g. 'Iron', will not accept the external links e.g. as the mime-type doesn't match,
+ *	('raw' - instead of 'text/javascript') as for security-reasons.
+ *
+ */
+?>
+<script type="text/javascript" src="../modules/lib_jquery/jquery-core/jquery-core.min.js"></script>
+<script type="text/javascript" src="../modules/lib_jquery/jquery-core/jquery-migrate.min.js"></script>
 
+<script type="text/javascript" src="../modules/lib_semantic/dist/semantic.min.js" ></script>
 
-<script type="text/javascript" src="https://raw.githubusercontent.com/labby/lib_semantic/master/dist/semantic.min.js" ></script>
-
-<link href="http://lepton-cms.org/modules/lib_semantic/dist/semantic.min.css" rel="stylesheet" type="text/css">
+<link href="../modules/lib_semantic/dist/semantic.min.css" rel="stylesheet" type="text/css">
 <link href="http://lepton-cms.org/_packinstall/style_200.css" rel="stylesheet" type="text/css" />
 
 </head>
@@ -261,13 +269,13 @@ function test_pass_length() {
 				<div class="ui two column grid">					
 					<div class="column">
 						<div class="ui horizontal segment">
-						<?php if (version_compare(PHP_VERSION, '5.2.4', '<')){ ?>
+						<?php if (version_compare(PHP_VERSION, '5.3.0', '<')){ ?>
 						<p>Your current PHP Version is: <?php print PHP_VERSION;  ?></p>
 						</div>
 					</div>
 					<div class="column">
 						<div class="ui horizontal segment">
-							<h4 class="warning">Please upgrade your PHP Release to 5.2.4 or higher</h4>
+							<h4 class="warning">Please upgrade your PHP Release to 5.3.0 or higher</h4>
 							<?php } ?>
 						</div>
 					</div>

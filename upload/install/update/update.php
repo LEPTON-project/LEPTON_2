@@ -31,9 +31,8 @@ if (!is_object($admin))
 <head>
 <title>LEPTON Update Script</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<script type="text/javascript" src="https://raw.githubusercontent.com/labby/lib_semantic/master/dist/semantic.min.js" ></script>
-
-<link href="http://lepton-cms.org/modules/lib_semantic/dist/semantic.min.css" rel="stylesheet" type="text/css">
+<script type='text/javascript' src='<?php echo LEPTON_URL; ?>/modules/lib_semantic/dist/semantic.min.js' ></script>
+<link rel="stylesheet" type="text/css" href="<?php echo LEPTON_URL; ?>/modules/lib_semantic/dist/semantic.min.css" media="screen,projection" />	
 <link href="http://lepton-cms.org/_packinstall/style_200.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -58,10 +57,22 @@ if (!is_object($admin))
 		if (version_compare($lepton_version, "2.0.0", "="))
 		{
 			echo("<h3 class='good'>Your LEPTON Version : $lepton_version </h3>");
-		    include 'scripts/201_update.php';
+		    include 'scripts/210_update.php';
 		} else {
 		die ("<h3 class='good'>You don't have to update, you are running current LEPTON release.</h3>");
 		}
+		
+		/**
+		 *  update to LEPTON 2.1.1 , check release
+		 */
+		$lepton_version = $database->get_one("SELECT `value` from `" . TABLE_PREFIX . "settings` where `name`='lepton_version'");
+		if (version_compare($lepton_version, "2.1.0", "="))
+		{
+			echo("<h3 class='good'>Your LEPTON Version : $lepton_version </h3>");
+		    include 'scripts/211_update.php';
+		} else {
+		die ("<h3 class='good'>You don't have to update, you are running current LEPTON release.</h3>");
+		}		
 
 		/**
 		 *  reload all addons

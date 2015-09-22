@@ -73,16 +73,16 @@ else
 		if ( defined( 'LEP_HEADERS_SENT' ) )
 		{
 			return;
-		} //defined( 'LEP_HEADERS_SENT' )
+		} 
 		if ( !$for || $for == '' || ( $for != 'frontend' && $for != 'backend' ) )
 		{
 			$for = 'frontend';
-		} //!$for || $for == '' || ( $for != 'frontend' && $for != 'backend' )
+		} 
 		$page_id = defined( 'PAGE_ID' ) ? PAGE_ID : ( ( isset( $_GET[ 'page_id' ] ) && is_numeric( $_GET[ 'page_id' ] ) ) ? $_GET[ 'page_id' ] : NULL );
 		
 		/**	*****************
 		 *	Aldus: 2014-11-01
-		 *	in some circumstances there is no page_id as constant nor inside the $_GET superglobal ...
+		 *	in some circumstances there is neither no page_id as constant nor inside the $_GET superglobal ...
 		 *	In this case the module-css or -js files are not loaded.
 		 *	So we are looking inside the $_POST superglobal ....
 		 */
@@ -98,15 +98,15 @@ else
 			if ( file_exists( LEPTON_PATH . '/templates/' . DEFAULT_THEME . '/headers.inc.php' ) )
 			{
 				__addItems( $for, LEPTON_PATH . '/templates/' . DEFAULT_THEME );
-			} //file_exists( LEPTON_PATH . '/templates/' . DEFAULT_THEME . '/headers.inc.php' )
-		} //$for == 'backend'
-		// load headers.inc.php for backend theme
+			} 
+		} 
+
 		else
 		{
 			if ( file_exists( LEPTON_PATH . '/templates/' . DEFAULT_TEMPLATE . '/headers.inc.php' ) )
 			{
 				__addItems( $for, LEPTON_PATH . '/templates/' . DEFAULT_TEMPLATE );
-			} //file_exists( LEPTON_PATH . '/templates/' . DEFAULT_TEMPLATE . '/headers.inc.php' )
+			} 
 		}
 		
 		// handle search
@@ -117,13 +117,8 @@ else
 		 *	ToDo:	look for the search-settings itself. The block is useless if SHOW_SEARCH is false!
 		 *
 		 */
-		#if ( ( $page_id == 0 ) && ( $for == 'frontend' ) )
-		#{ 
-			
-			#$caller = debug_backtrace();
-			#if ( isset( $caller[ 2 ][ 'file' ] ) && ( strpos( $caller[ 2 ][ 'file' ], DIRECTORY_SEPARATOR . 'search' . DIRECTORY_SEPARATOR . 'index.php' ) !== false ) )
-			#{
-				// the page is called from the LEPTON SEARCH
+
+			// the page is called from the LEPTON SEARCH
 			if ($for == "frontend") {
 				$css_loaded = false;
 				$js_loaded = false;
@@ -180,9 +175,7 @@ else
 					}
 				}
 			}
-	
-			#}
-		#} //( $page_id == 0 ) && ( $for == 'frontend' )
+
 		
 		// load CSS and JS for droplets
 		if ( ( $for == 'frontend' ) && $page_id && is_numeric( $page_id ) )
@@ -191,8 +184,8 @@ else
 			{
 				require_once LEPTON_PATH . '/framework/summary.droplets.php';
 				get_droplet_headers( $page_id );
-			} //file_exists( LEPTON_PATH . '/framework/summary.droplets.php' )
-		} //( $for == 'frontend' ) && $page_id && is_numeric( $page_id )
+			} 
+		} 
 		
 		$css_subdirs = array();
 		$js_subdirs  = array();
@@ -200,19 +193,20 @@ else
 		// it's an admin tool...
 		if ( $for == 'backend' && isset( $_REQUEST[ 'tool' ] ) && file_exists( LEPTON_PATH . '/modules/' . $_REQUEST[ 'tool' ] . '/tool.php' ) )
 		{
-			$css_subdirs = array(
+			$css_subdirs[] = array(
 				 '/modules/' . $_REQUEST[ 'tool' ],
 				'/modules/' . $_REQUEST[ 'tool' ] . '/css' 
 			);
-			$js_subdirs  = array(
+			$js_subdirs[]  = array(
 				 '/modules/' . $_REQUEST[ 'tool' ],
 				'/modules/' . $_REQUEST[ 'tool' ] . '/js' 
 			);
 			if ( file_exists( LEPTON_PATH . '/modules/' . $_REQUEST[ 'tool' ] . '/headers.inc.php' ) )
 			{
 				__addItems( $for, LEPTON_PATH . '/modules/' . $_REQUEST[ 'tool' ] );
-			} //file_exists( LEPTON_PATH . '/modules/' . $_REQUEST[ 'tool' ] . '/headers.inc.php' )
-		} //$for == 'backend' && isset( $_REQUEST[ 'tool' ] ) && file_exists( LEPTON_PATH . '/modules/' . $_REQUEST[ 'tool' ] . '/tool.php' )
+			} 
+		} 
+		
 		// if we have a page id...
 		elseif ( $page_id && is_numeric( $page_id ) )
 		{
@@ -234,14 +228,14 @@ else
 						if ( defined( 'WYSIWYG_EDITOR' ) && WYSIWYG_EDITOR != "none" )
 						{
 							$headers_path = LEPTON_PATH . '/modules/' . WYSIWYG_EDITOR;
-						} // defined( 'WYSIWYG_EDITOR' ) && WYSIWYG_EDITOR != "none"
-					} // $for == 'backend' && !strcasecmp( $module, 'wysiwyg' )
+						} 
+					} 
 					// find header definition file
 					if ( file_exists( $headers_path . '/headers.inc.php' ) )
 					{
 						$current_section = $section[ 'section_id' ];
 						__addItems( $for, $headers_path );
-					} //file_exists( $headers_path . '/headers.inc.php' )
+					} 
 					else
 					{
 						/**
@@ -258,33 +252,52 @@ else
 						 }
 						 // End Aldus
 					}
-					$css_subdirs = array(
-						 '/modules/' . $module,
-						'/modules/' . $module . '/css' 
+					
+					$temp_css = array(
+						'modules/' . $module,
+						'modules/' . $module . '/css' 
 					);
-					$js_subdirs  = array(
-						 '/modules/' . $module,
-						'/modules/' . $module . '/js' 
+					
+					$temp_js = array(
+						'modules/' . $module,
+						'modules/' . $module . '/js' 
 					);
+			
+					// add css/js search subdirs for frontend only; page based CSS/JS
+					// does not make sense in BE
+					if ( $for == 'frontend' )
+					{
+						// Aldus:
+						$current_template = $wb->page['template'] != "" ? $wb->page['template'] : DEFAULT_TEMPLATE;
+						$lookup_file = "templates/".$current_template."/frontend/".$module;
+						
+						$temp_css[] = $lookup_file;
+						$temp_css[] = $lookup_file."/css";
+						
+						$temp_js[] = $lookup_file;
+						$temp_js[] = $lookup_file."/js";
+						
+						// End Aldus
+				
+					} // $for == 'frontend' 
+					else {
+						// Aldus:
+						$current_theme = DEFAULT_THEME;
+						$lookup_file = "templates/".$current_theme."/backend/".$module;
+						$temp_css[] = $lookup_file;
+						$temp_css[] = $lookup_file."/css";
+						
+						$temp_js[] = $lookup_file;
+						$temp_js[] = $lookup_file."/js";
+						
+						// End Aldus
+					}
+					
+					$css_subdirs[]= array_reverse($temp_css);
+					$js_subdirs[]= array_reverse($temp_js);
+					
 				} // foreach ($sections as $section)
 			} // if (count($sections))
-			
-			// add css/js search subdirs for frontend only; page based CSS/JS
-			// does not make sense in BE
-			if ( $for == 'frontend' )
-			{
-				// Aldus: 2014-11-02 - not clear WHY PAGES_DIRECTORY instead of current used frontend-template!
-				#array_push( $css_subdirs, PAGES_DIRECTORY, PAGES_DIRECTORY . '/css' );
-				#array_push( $js_subdirs, PAGES_DIRECTORY, PAGES_DIRECTORY . '/js' );
-				// Aldus:
-				$current_template = $wb->page['template'] != "" ? $wb->page['template'] : DEFAULT_TEMPLATE;
-				$lookup_file = "templates/".$current_template."/frontend/".$module;
-				array_push( $css_subdirs, $lookup_file, $lookup_file . '/css' );
-				array_push( $js_subdirs, $lookup_file, $lookup_file . '/js' );
-				// End Aldus
-				
-			} //$for == 'frontend'
-			
 		} // if ( $page_id )
 		
 		// add template css
@@ -297,51 +310,83 @@ else
 		
 		// automatically add CSS files
 		/**
-		 *	Aldus: 2014-11-03
 		 *	We are taking the first file (-link) we found.
+		 *	Keep in mind that an optional additional css file in the frontend-template
+		 *	is loaded INSTEAD of the module-internal one!
 		 */
-		$css_subdirs = array_reverse( $css_subdirs );
-		$css_found = false;
-		$css_print_found = false;
-		foreach ( $css_subdirs as $directory )
+		foreach( $css_subdirs as $first_level_ref )
 		{
-			// frontend.css / backend.css
-			$file = $directory . '/' . $for . '.css';
-			if ( file_exists( LEPTON_PATH . '/' . $file ) )
-			{
-				if ($css_found == false) {
-					$HEADERS[ $for ][ 'css' ][] = array(
-						'media' => 'all',
-						'file' => $file 
-					);
-					$css_found = true;
-				}
-			}
+			$css_found = false;
+			$css_print_found = false;
 			
-			// frontend_print.css / backend_print.css
-			$file = $directory . '/' . $for . '_print.css';
-			if ( file_exists( LEPTON_PATH . '/' . $file ) )
+			foreach( $first_level_ref as $directory )
 			{
-				if ($css_print_found == false) {
-					$HEADERS[ $for ][ 'css' ][] = array(
-						'media' => 'print',
-						'file' => $file 
-					);
-					$css_print_found = true;
+				// frontend.css / backend.css
+				$file = $directory . '/' . $for . '.css';
+				if ( file_exists( LEPTON_PATH . '/' . $file ) )
+				{
+					if ($css_found == false) {
+						$HEADERS[ $for ][ 'css' ][] = array(
+							'media' => 'all',
+							'file' => $file 
+						);
+						$css_found = true;
+					} 
+				}
+			
+				// frontend_print.css / backend_print.css
+				$file = $directory . '/' . $for . '_print.css';
+				if ( file_exists( LEPTON_PATH . '/' . $file ) )
+				{
+					if ($css_print_found == false) {
+						$HEADERS[ $for ][ 'css' ][] = array(
+							'media' => 'print',
+							'file' => $file 
+						);
+						$css_print_found = true;
+					}
 				}
 			}
 		}
 		
+		/**
+		 *	Try to get a frontend "<page_id>.css" if there is one	
+		 *
+		 */
+		if ( $for == 'frontend' ) {
+			$current_template = $wb->page['template'] != "" ? $wb->page['template'] : DEFAULT_TEMPLATE;
+			$lookup_files = array(
+				"templates/".$current_template."/css/".$page_id.".css",
+				"templates/".$current_template."/".$page_id.".css"
+			);
+			foreach($lookup_files as &$file) {
+				if ( file_exists( LEPTON_PATH . '/' . $file ) ) {
+					$HEADERS[ $for ][ 'css' ][] = array(
+						'media' => 'all',
+							'file' => $file 
+					);
+					break;
+				}
+			}
+		}
+			
+		// Aautomatically add JS files
 		
-		// automatically add JS files
-		foreach ( $js_subdirs as $directory )
+		foreach( $js_subdirs as &$first_level_ref )
 		{
-			$file = $directory . '/' . $for . '.js';
-			if ( file_exists( LEPTON_PATH . '/' . $file ) )
+			$got_js = false;
+			foreach( $first_level_ref as $directory )
 			{
-				$HEADERS[ $for ][ 'js' ][] = $file;
-			} //file_exists( LEPTON_PATH . '/' . $file )
-		} //$js_subdirs as $directory
+				$file = $directory . '/' . $for . '.js';
+				if ( file_exists( LEPTON_PATH . '/' . $file ) )
+				{
+					if ($got_js == false) {
+						$HEADERS[ $for ][ 'js' ][] = $file;
+						$got_js = true;
+					}
+				}
+			}
+		}
 		$output = null;
 		foreach ( array( 'meta', 'css', 'jquery', 'js' ) as $key )
 		{

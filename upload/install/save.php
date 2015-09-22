@@ -485,7 +485,7 @@ $config_content = "" .
 "define('LEPTON_PATH', dirname(__FILE__));\n".
 "define('LEPTON_URL', '$lepton_url');\n".
 "define('ADMIN_PATH', LEPTON_PATH.'/admins');\n".
-"define('ADMIN_URL', '$lepton_url/admins');\n".
+"define('ADMIN_URL', LEPTON_URL.'/admins');\n".
 "\n".
 "define('LEPTON_GUID', '".$lepton_guid."');\n".
 "define('LEPTON_SERVICE_FOR', '".$lepton_service_for."');\n".
@@ -622,6 +622,7 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 	." ('default_template', 'lepton2'),"
 	." ('default_theme', 'algos'),"
 	." ('default_charset', 'utf-8'),"
+	." ('link_charset', 'utf-8'),"	
 	." ('multiple_menus', 'true'),"
 	." ('page_level_limit', '4'),"
 	." ('intro_page', 'false'),"

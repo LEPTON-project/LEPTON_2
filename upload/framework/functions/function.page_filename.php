@@ -44,62 +44,44 @@ else
  *	
  */
 function page_filename( $string ) {
-
-	$string = mb_convert_encoding( $string, 'HTML-ENTITIES', 'UTF-8' );
-
-	// Now remove all bad characters		
-	$bad    = array(
-		 '\'',
-		'"',
-		'`',
-		'!',
-		'@',
-		'#',
-		'$',
-		'%',
-		'^',
-		'&',
-		'*',
-		'=',
-		'+',
-		'|',
-		'/',
-		'\\',
-		';',
-		':',
-		',',
-		'?' 
-	);
-	$string = str_replace( $bad, '', $string );
+	
+	require_once(LEPTON_PATH.'/framework/functions/function.entities_to_7bit.php');
+	
+	$string = entities_to_7bit($string);
+	// $string = page_filename_2($string);
+	
+	// Now remove all bad characters
+	$bad = array('\'','"','`','!','@','#','$','%','^','&','*','=','+','|','/','\\',';',':',',','?');
+	$string = str_replace($bad, '', $string);
 	
 	// replace multiple dots in filename to single dot and (multiple) dots at the end of the filename to nothing
-	$string = preg_replace( array(
-		 '/\.+/',
-		'/\.+$/' 
-	), array(
-		 '.',
-		'' 
-	), $string );
+	$string = preg_replace(array('/\.+/', '/\.+$/'), array('.', ''), $string);
 	
 	// Now replace spaces with page spcacer
-	$string = trim( $string );
-	
-	$string = preg_replace( '/(\s)+/', PAGE_SPACER, $string );
+	$string = trim($string);
+	$string = preg_replace('/(\s)+/', PAGE_SPACER, $string);
 	
 	// Now convert to lower-case
-	$string = strtolower( $string );
+	$string = strtolower($string);
 	
 	// If there are any weird language characters, this will protect us against possible problems they could cause
-	$string = str_replace( array(
-		 '%2F',
-		'%' 
-	), array(
-		 '/',
-		'' 
-	), urlencode( $string ) );
+	$string = str_replace(array('%2F', '%'), array('/', ''), urlencode($string));
 	
 	// Finally, return the cleaned string
 	return $string;
 }
 
+function page_filename_2( $string ) {
+	require_once( LEPTON_PATH."/modules/lib_twig/library.php" );
+	
+	$temp_loader = new Twig_Loader_String();
+	$twig = new Twig_Environment($temp_loader);
+	
+	return $twig->render(
+		"{{ data|convert_encoding('UTF-8', '".LINK_CHARSET."') }}",
+		array(
+			'data' => $string
+		)
+	);
+}
 ?>

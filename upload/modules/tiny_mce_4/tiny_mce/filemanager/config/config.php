@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  @module         TinyMCE-4-jQ
  *  @version        see info.php of this module
@@ -12,7 +13,7 @@
  *  Responsive Filemanager is distributed by <a href="http://www.responsivefilemanager.com/">http://www.responsivefilemanager.com/</a> and is licensed under the <a href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution-NonCommercial 3.0</a>  Unported License
  *
  */
- 
+
 // include class.secure.php to protect this file and the whole CMS!
 if (defined('LEPTON_PATH')) {	
 	include(LEPTON_PATH.'/framework/class.secure.php'); 
@@ -32,14 +33,13 @@ if (defined('LEPTON_PATH')) {
 }
 // end include class.secure.php
 
-// session has been started by LEPTON-CMS
-// session_start();
+//	Session is started by LEPTON-CMS!
+#session_start();
 
-// mb encoding is also set by LEPTON-CMS
 mb_internal_encoding('UTF-8');
 
-// default_time_zone is set by LEPTON-CMS
-// date_default_timezone_set('Europe/Rome');
+//	Default TimeZone settings are set by LEPTON-CMS!
+#date_default_timezone_set('Europe/Rome');
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +59,7 @@ mb_internal_encoding('UTF-8');
 |
 */
 
+//	Inside LEPTON-CMS we're using the access-keys!
 define('USE_ACCESS_KEYS', true); // TRUE or FALSE
 
 /*
@@ -104,7 +105,8 @@ $config = array(
 	| with start and final /
 	|
 	*/
-	'upload_dir' => MEDIA_DIRECTORY.'/',
+	//	Inside LEPTON-CMS we're using the MEDIA_DIRECTORY
+	'upload_dir' =>  MEDIA_DIRECTORY.'/',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -114,7 +116,6 @@ $config = array(
 	| with final /
 	|
 	*/
-	//'current_path' => '../source/',
 	'current_path' => '../../../../'.MEDIA_DIRECTORY.'/', // relative path from filemanager folder to upload files folder
 
 	/*
@@ -143,7 +144,7 @@ $config = array(
 	| Keys are CASE SENSITIVE!
 	|
 	*/
-
+	//	Inside LEPTON-CMS wi're using the LEPTON-GUID as access key
 	'access_keys' => array( LEPTON_GUID ),
 
 	//--------------------------------------------------------------------------------------------------------
@@ -166,6 +167,7 @@ $config = array(
 	| default language file name
 	|--------------------------------------------------------------------------
 	*/
+	//	Aldus 2015-07-22:	Why not using the  LEPTON-CMS DEFAULT-LANGUAGE or LANGUAGE here?
 	'default_language' => "en_EN",
 
 	/*
@@ -297,8 +299,10 @@ $config = array(
 	 * AVIARY config
 	 *******************/
 	'aviary_active'                           => true,
-	'aviary_apiKey'                           => "dvh8qudbp6yx2bnp",
-	'aviary_secret'                           => "m6xaym5q42rpw433",
+	'aviary_apiKey'                           => "2444282ef4344e3dacdedc7a78f8877d",
+	'aviary_language'                         => "en",
+	'aviary_theme'                            => "light",
+	'aviary_tools'                            => "all",
 	// Add or modify the Aviary options below as needed - they will be json encoded when added to the configuration so arrays can be utilized as needed
 
 	//The filter and sorter are managed through both javascript and php scripts because if you have a lot of
@@ -355,9 +359,9 @@ $config = array(
 	// The image creation path is always relative so if i'm inside source/test/test1 and I upload an image, the path start from here
 	//
 	'relative_image_creation'                 => false, //activate or not the creation of one or more image resized with relative path from upload folder
-	'relative_path_from_current_pos'          => array( 'thumb/', 'thumb/' ), //relative path of the image folder from the current position on upload folder
-	'relative_image_creation_name_to_prepend' => array( '', 'test_' ), //name to prepend on filename
-	'relative_image_creation_name_to_append'  => array( '_test', '' ), //name to append on filename
+	'relative_path_from_current_pos'          => array( './', './' ), //relative path of the image folder from the current position on upload folder
+	'relative_image_creation_name_to_prepend' => array( '', '' ), //name to prepend on filename
+	'relative_image_creation_name_to_append'  => array( '_thumb', '_thumb1' ), //name to append on filename
 	'relative_image_creation_width'           => array( 300, 400 ), //width of image (you can leave empty if you set height)
 	'relative_image_creation_height'          => array( 200, '' ), //height of image (you can leave empty if you set width)
 	/*
@@ -390,10 +394,9 @@ return array_merge(
 		// For a list of options see: https://developers.aviary.com/docs/web/setup-guide#constructor-config
 		'aviary_defaults_config' => array(
 			'apiKey'     => $config['aviary_apiKey'],
-			'apiVersion' => 3,
-			'language'   => 'en',
-			'theme'      => 'light',
-			'tools'      => 'all'
+			'language'   => $config['aviary_language'],
+			'theme'      => $config['aviary_theme'],
+			'tools'      => $config['aviary_tools']
 		),
 	)
 );

@@ -47,13 +47,11 @@ if ( file_exists( LEPTON_PATH.'/modules/tiny_mce_4/tiny_mce/skins/skin.custom.cs
 		'backend' => array(
 		    'css' => array(
 				array(
-					'media'		=> 'screen',
-					'file'		=> '/modules/tiny_mce_4/tiny_mce/skins/skin.custom.css',
+					'media'	=> 'screen',
+					'file'	=> '/modules/tiny_mce_4/tiny_mce/skins/skin.custom.css'
 				)
 			)
-	
 		)
 	);
 }
-
 ?>

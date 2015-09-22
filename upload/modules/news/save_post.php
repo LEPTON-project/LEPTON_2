@@ -77,8 +77,7 @@ $section_id = '.$section_id.';
 $post_id = '.$post_id.';
 define("POST_SECTION", $section_id);
 define("POST_ID", $post_id);
-require("'.$index_location.'config.php");
-require(LEPTON_PATH."/index.php");
+require("'.$index_location.'/index.php");
 ?>';
 	if($handle = fopen($filename, 'w+'))
     {
@@ -93,7 +92,7 @@ require(LEPTON_PATH."/index.php");
 
 }
 
-// Include WB admin wrapper script
+// Include admin wrapper script
 $update_when_modified = true; // Tells script to update when this page was last updated
 require(LEPTON_PATH.'/modules/admin.php');
 

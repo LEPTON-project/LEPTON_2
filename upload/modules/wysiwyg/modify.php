@@ -44,6 +44,11 @@ $get_content = $database->query($query);
 $data = $get_content->fetchRow( MYSQL_ASSOC );
 $content = htmlspecialchars($data['content']);
 
+/**
+ *	Try to add an \ before the "$" char.
+ */
+$content = str_replace("\$", "\\\$", $content);
+
 if(!isset($wysiwyg_editor_loaded)) {
 	$wysiwyg_editor_loaded=true;
 
@@ -94,7 +99,7 @@ $form_values = array(
 $twig_util->resolve_path("modify.lte");
 
 echo $parser->render( 
-	$twig_modul_namespace."modify.lte",	//	template-filename
+	$twig_modul_namespace."modify.lte", // template-filename
 	$form_values	//	template-data
 );
 	

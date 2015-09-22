@@ -153,10 +153,21 @@ function save_settings(&$admin, &$database)
     unset ($TIME_FORMATS);
     
     // charsets must be a key from /interface/charsets
-    $char_set = ($admin->get_post('default_charset'));
+    $char_set = $admin->get_post('default_charset');
     include (ADMIN_PATH.'/interface/charsets.php');
     $settings['default_charset'] = (array_key_exists($char_set, $CHARSETS) ? $char_set : $old_settings['default_charset']);
+    
+    /**
+     *	Introduce in L* 2.1.0
+     *	Link-charset for generated filenames.
+     */
+    if (isset($_POST['link_charset'])) {
+    	$char_set = $admin->get_post('link_charset');
+    	$settings['link_charset'] = (array_key_exists($char_set, $CHARSETS) ? $char_set : $old_settings['link_charset']);
+    }
+    
     unset ($CHARSETS);
+    
     //  error reporting values validation
     require (ADMIN_PATH.'/interface/er_levels.php');
     $settings['er_level'] = isset ($settings['er_level']) && (array_key_exists($settings['er_level'], $ER_LEVELS)) ? intval($settings['er_level']) : $old_settings['er_level'];
@@ -198,8 +209,20 @@ function save_settings(&$admin, &$database)
 	// validate maximum logon attempts
     $max_attempts = isset ($settings['max_attempts']) ? intval($settings['max_attempts']) : $old_settings['max_attempts'];
     $settings['max_attempts'] = ($max_attempts > 0) ? $max_attempts : $old_settings['max_attempts'];
-    //  check templates
+
+	/**
+	 *	check theme
+	 */
     $settings['default_theme'] = isset ($settings['default_theme']) ? ($settings['default_theme']) : $old_settings['default_theme'];
+	
+	/**
+	 *	Has the default theme changed?
+	 */
+	if ($settings['default_theme'] != $old_settings['default_theme']) {
+		include_once LEPTON_PATH.'/framework/functions/function.switch_theme.php';
+		switch_theme( $settings['default_theme'] );
+	}
+	
     $settings['default_template'] = isset ($settings['default_template']) ? ($settings['default_template']) : $old_settings['default_template'];
     $settings['app_name'] = isset ($settings['app_name']) ? $settings['app_name'] : $old_settings['app_name'];
 

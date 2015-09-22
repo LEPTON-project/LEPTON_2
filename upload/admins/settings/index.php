@@ -376,7 +376,7 @@ function build_settings( &$admin, &$database )
 			) );
 			// Check if it is selected
 			$tpl->set_var( 'SELECTED', (
-				( DEFAULT_LANGUAGE == $l_codes[ $l_name ] )
+				( DEFAULT_LANGUAGE == strtoupper($l_codes[ $l_name ] ) )
 				? ' selected="selected"'
 				: ""
 				)
@@ -392,7 +392,8 @@ function build_settings( &$admin, &$database )
 		$tpl->set_var( 'VALUE', $code );
 		$tpl->set_var( 'NAME', $title );
 		$tpl->set_var( 'SELECTED', (
-			( DEFAULT_CHARSET == $code )
+			/* ( DEFAULT_CHARSET == $code ) */
+			( LINK_CHARSET == $code )
 			? ' selected="selected"' 
 			: ""
 			)

@@ -44,9 +44,11 @@ if(!defined('LANGUAGE_LOADED')) {
 }
 
 // Set the language information
-$language_code = 'EN';
+$language_directory = 'EN';
+$language_code = 'gb';
 $language_name = 'English';
 $language_version = '1.0';
+$language_delete  =  false;
 $language_platform = '1.0.x';
 $language_author = 'Ryan Djurovich, Christian Sommer';
 $language_license = 'GNU General Public License';
@@ -247,7 +249,7 @@ $TEXT = array(
 	'NEED_PASSWORD_TO_CONFIRM' => 'Please confirm the changes with your current password',
 	'NEED_TO_LOGIN' 		=> 'Need to log-in?',
 	'NEW_PASSWORD' 			=> 'New Password',
-	'NEW_USER_HINT'			=> 'Minimum length for user name: %d chars, Minimum length for Password: %d chars!',
+	'NEW_USER_HINT'			=> 'Minimum length for <strong>User Name:</strong> %d chars, minimum length for <strong>Password:</strong> %d chars!',
 	'NEW_WINDOW' 			=> 'New Window',
 	'NEXT' 					=> 'Next',
 	'NEXT_PAGE' 			=> 'Next Page',
