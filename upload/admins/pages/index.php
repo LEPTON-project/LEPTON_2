@@ -245,9 +245,15 @@ function parent_list($parent)
 {
   global $admin, $database, $template, $field_set;
 
+  if(is_null($parent)){
+    $parent = 'is null';
+  }else{
+    $parent = ' = ' . $parent;
+  }
+
   $admin_user_id = $admin->get_user_id();
 
-  $query = "SELECT `page_id`,`admin_groups`,`admin_users`,`menu_title`,`page_title`,`visibility`,`parent`,`level`,`viewing_groups`,`viewing_users` FROM ".TABLE_PREFIX."pages WHERE parent = '$parent' AND visibility!='deleted' ORDER BY position ASC";
+  $query = "SELECT `page_id`,`admin_groups`,`admin_users`,`menu_title`,`page_title`,`visibility`,`parent`,`level`,`viewing_groups`,`viewing_users` FROM ".TABLE_PREFIX."pages WHERE parent $parent AND visibility!='deleted' ORDER BY position ASC";
   $get_pages = $database->query($query);
   while($page = $get_pages->fetchRow( MYSQL_ASSOC )) {
     if($admin->page_is_visible($page)==false)
