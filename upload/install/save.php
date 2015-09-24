@@ -545,54 +545,46 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 
 	// Try installing tables
 	// Pages table
-	$pages = 'CREATE TABLE `' . TABLE_PREFIX . '_pages` ('
-	. ' `page_id` int(11) NOT NULL AUTO_INCREMENT,'
-	. ' `parent` int(11) DEFAULT NULL,'
-	. ' `root_parent` int(11) DEFAULT NULL,'
-	. ' `level` int(11) NOT NULL,'
-	. ' `link` text NOT NULL,'
-	. ' `target` varchar(7) NOT NULL DEFAULT \'\','
-	. ' `page_title` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `menu_title` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `description` text NOT NULL,'
-	. ' `keywords` text NOT NULL,'
-	. ' `page_trail` text NOT NULL,'
-	. ' `template` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `visibility` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `position` int(11) NOT NULL DEFAULT \'0\','
-	. ' `menu` int(11) NOT NULL DEFAULT \'0\','
-	. ' `language` varchar(5) NOT NULL DEFAULT \'\','
-	. ' `page_code` varchar(100) NOT NULL DEFAULT \'\','
-	. ' `searching` int(11) NOT NULL DEFAULT \'0\','
-	. ' `admin_groups` text NOT NULL,'
-	. ' `admin_users` text NOT NULL,'
-	. ' `viewing_groups` text NOT NULL,'
-	. ' `viewing_users` text NOT NULL,'
-	. ' `modified_when` int(11) NOT NULL DEFAULT \'0\','
-	. ' `modified_by` int(11) NOT NULL DEFAULT \'0\','
-	. ' PRIMARY KEY (`page_id`),'
-	. ' KEY `IDX_33B3B0A01F348C8E` (`root_parent`),'
-	. ' KEY `IDX_33B3B0A03D8E604F` (`parent`),'
-	. ' CONSTRAINT `FK_33B3B0A01F348C8E` FOREIGN KEY (`root_parent`) REFERENCES `lep_pages` (`page_id`),'
-	. ' CONSTRAINT `FK_33B3B0A03D8E604F` FOREIGN KEY (`parent`) REFERENCES `lep_pages` (`page_id`)'
-	. ')ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8';
+	$pages = 'CREATE TABLE `'.TABLE_PREFIX.'pages` ( `page_id` INT NOT NULL auto_increment,'
+	       . ' `parent` INT DEFAULT NULL,'
+	       . ' `root_parent` INT DEFAULT NULL,'
+	       . ' `level` INT NOT NULL DEFAULT \'0\','
+	       . ' `link` TEXT NOT NULL,'
+	       . ' `target` VARCHAR( 7 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `page_title` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `menu_title` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `description` TEXT NOT NULL ,'
+	       . ' `keywords` TEXT NOT NULL ,'
+	       . ' `page_trail` TEXT NOT NULL  ,'
+	       . ' `template` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `visibility` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `position` INT NOT NULL DEFAULT \'0\','
+	       . ' `menu` INT NOT NULL DEFAULT \'0\','
+	       . ' `language` VARCHAR( 5 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `page_code` VARCHAR( 100 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `searching` INT NOT NULL DEFAULT \'0\','
+	       . ' `admin_groups` TEXT NOT NULL ,'
+	       . ' `admin_users` TEXT NOT NULL ,'
+	       . ' `viewing_groups` TEXT NOT NULL ,'
+	       . ' `viewing_users` TEXT NOT NULL ,'
+	       . ' `modified_when` INT NOT NULL DEFAULT \'0\','
+	       . ' `modified_by` INT NOT NULL  DEFAULT \'0\','
+	       . ' PRIMARY KEY ( `page_id` ) '
+	       . ' )';
 	$database->query($pages);
 	if ($database->is_error()) trigger_error(sprintf('[%s - %s] %s', __FILE__, __LINE__, $database->get_error()), E_USER_ERROR);
 
 	// Sections table
-	$sections = 'CREATE TABLE `' . TABLE_PREFIX . 'sections` ('
-	. ' `section_id` int(11) NOT NULL AUTO_INCREMENT,'
-	. ' `page_id` int(11) DEFAULT NULL,'
-	. ' `position` int(11) NOT NULL DEFAULT \'0\','
-	. ' `module` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `block` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `publ_start` varchar(255) NOT NULL DEFAULT \'0\','
-	. ' `publ_end` varchar(255) NOT NULL DEFAULT \'0\','
-	. ' `name` varchar(255) NOT NULL DEFAULT \'no name\','
-	. ' PRIMARY KEY (`section_id`),'
-	. ' KEY `IDX_62184A52C4663E4` (`page_id`),'
-	. ' CONSTRAINT `FK_62184A52C4663E4` FOREIGN KEY (`page_id`) REFERENCES `lep_pages` (`page_id`)'
-	. ')ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8';
+	$sections = 'CREATE TABLE `'.TABLE_PREFIX.'sections` ( `section_id` INT NOT NULL auto_increment,'
+	       . ' `page_id` INT DEFAULT NULL,'
+	       . ' `position` INT NOT NULL DEFAULT \'0\','
+	       . ' `module` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `block` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `publ_start` VARCHAR( 255 ) NOT NULL DEFAULT \'0\' ,'
+	       . ' `publ_end` VARCHAR( 255 ) NOT NULL DEFAULT \'0\' ,'
+	       . ' `name` VARCHAR( 255 ) NOT NULL DEFAULT \'no name\' ,'
+	       . ' PRIMARY KEY ( `section_id` ) '
+	       . ' )';
 	$database->query($sections);
     if ($database->is_error()) trigger_error(sprintf('[%s - %s] %s', __FILE__, __LINE__, $database->get_error()), E_USER_ERROR);
 
@@ -663,40 +655,36 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 	if ($database->is_error()) trigger_error(sprintf('[%s - %s] %s', __FILE__, __LINE__, $database->get_error()), E_USER_ERROR);
 
 	// Users table
-	$users = 'CREATE TABLE `' . TABLE_PREFIX . 'users` ('
-			. ' `user_id` int(11) NOT NULL AUTO_INCREMENT,'
-			. ' `group_id` int(11) DEFAULT NULL,'
-			. ' `groups_id` varchar(255) NOT NULL DEFAULT \'0\','
-			. ' `active` int(11) NOT NULL DEFAULT \'0\','
-			. ' `statusflags` int(11) NOT NULL DEFAULT \'6\','
-			. ' `username` varchar(255) NOT NULL DEFAULT \'\','
-			. ' `password` varchar(255) NOT NULL DEFAULT \'\','
-			. ' `last_reset` int(11) NOT NULL DEFAULT \'0\','
-			. ' `display_name` varchar(255) NOT NULL DEFAULT \'\','
-			. ' `email` text NOT NULL,'
-			. ' `timezone_string` varchar(50) NOT NULL DEFAULT \'' . $default_timezone_string . '\','
-			. ' `date_format` varchar(255) NOT NULL DEFAULT \'\','
-			. ' `time_format` varchar(255) NOT NULL DEFAULT \'\','
-			. ' `language` varchar(5) NOT NULL DEFAULT \'' .$default_language .'\','
-			. ' `home_folder` text NOT NULL,'
-			. ' `login_when` int(11) NOT NULL DEFAULT \'0\','
-			. ' `login_ip` varchar(15) NOT NULL DEFAULT \'\','
-			. ' PRIMARY KEY (`user_id`),'
-			. ' KEY `IDX_744F03CFE54D947` (`group_id`),'
-			. ' CONSTRAINT `FK_744F03CFE54D947` FOREIGN KEY (`group_id`) REFERENCES `lep_groups` (`group_id`)'
-			. ')ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8';
+	$users = 'CREATE TABLE `'.TABLE_PREFIX.'users` ( `user_id` INT NOT NULL auto_increment,'
+	       . ' `group_id` INT DEFAULT NULL,'
+	       . ' `groups_id` VARCHAR( 255 ) NOT NULL DEFAULT \'0\','
+	       . ' `active` INT NOT NULL DEFAULT \'0\','
+		   . ' `statusflags` INT NOT NULL DEFAULT \'6\','
+	       . ' `username` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `password` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `last_reset` INT NOT NULL DEFAULT \'0\','
+	       . ' `display_name` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `email` TEXT NOT NULL ,'
+	       . " `timezone_string` VARCHAR( 50 ) NOT NULL DEFAULT '$default_timezone_string',"
+	       . ' `date_format` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `time_format` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	       . ' `language` VARCHAR( 5 ) NOT NULL DEFAULT \'' .$default_language .'\' ,'
+	       . ' `home_folder` TEXT NOT NULL ,'
+	       . ' `login_when` INT NOT NULL  DEFAULT \'0\','
+	       . ' `login_ip` VARCHAR( 15 ) NOT NULL DEFAULT \'\' ,'
+	       . ' PRIMARY KEY ( `user_id` ) '
+	       . ' )';
 	$database->query($users);
 	if ($database->is_error()) trigger_error(sprintf('[%s - %s] %s', __FILE__, __LINE__, $database->get_error()), E_USER_ERROR);
 
 	// Groups table
-	$group = 'CREATE TABLE  `' . TABLE_PREFIX . 'groups` ('
-	. ' `group_id` int(11) NOT NULL AUTO_INCREMENT,'
-	. ' `name` varchar(255) NOT NULL DEFAULT \'\','
-	. ' `system_permissions` text NOT NULL,'
-	. ' `module_permissions` text NOT NULL,'
-	. ' `template_permissions` text NOT NULL,'
-	. ' PRIMARY KEY (`group_id`)'
-	. ')ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8';
+	$groups = 'CREATE TABLE `'.TABLE_PREFIX.'groups` ( `group_id` INT NOT NULL auto_increment,'
+	        . ' `name` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
+	        . ' `system_permissions` TEXT NOT NULL ,'
+	        . ' `module_permissions` TEXT NOT NULL ,'
+	        . ' `template_permissions` TEXT NOT NULL ,'
+	        . ' PRIMARY KEY ( `group_id` ) '
+	        . ' )';
 	$database->query($groups);
 	if ($database->is_error()) trigger_error(sprintf('[%s - %s] %s', __FILE__, __LINE__, $database->get_error()), E_USER_ERROR);
 
