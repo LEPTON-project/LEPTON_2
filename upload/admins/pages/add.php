@@ -159,20 +159,25 @@ $order->clean($parent);
 $position = $order->get_new($parent);
 
 // Work-out if the page parent (if selected) has a seperate template or language to the default
-$query_parent = $database->query("SELECT template, language FROM ".TABLE_PREFIX."pages WHERE page_id = '$parent'");
-if($query_parent->numRows() > 0)
-{
-	$fetch_parent = $query_parent->fetchRow( MYSQL_ASSOC );
-	$template = $fetch_parent['template'];
-	$language = $fetch_parent['language'];
-} else {
-	$template = '';
-	$language = DEFAULT_LANGUAGE;
+$template = '';
+$language = DEFAULT_LANGUAGE;
+if($parent != '0'){
+	$query_parent = $database->query("SELECT template, language FROM ".TABLE_PREFIX."pages WHERE page_id = '$parent'");
+	if($query_parent->numRows() > 0)
+	{
+		$fetch_parent = $query_parent->fetchRow( MYSQL_ASSOC );
+		$template = $fetch_parent['template'];
+		$language = $fetch_parent['language'];
+	}
 }
 
 // Insert page into pages table
 $sql  = 'INSERT INTO `'.TABLE_PREFIX.'pages` SET ';
-$sql .= '`parent` = '.$parent.', ';
+if($parent != '0'){
+	$sql .= '`parent` = '.$parent.', ';
+}else{
+	$sql .= '`parent` = NULL, ';
+}
 $sql .= '`target` = "_top", ';
 $sql .= '`page_title` = "'.$title.'", ';
 $sql .= '`menu_title` = "'.$title.'", ';

@@ -62,7 +62,7 @@ if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
 $description = htmlspecialchars(addslashes($admin->get_post('description')) );
 $keywords = htmlspecialchars(addslashes($admin->get_post('keywords')) );
 $page_code = htmlspecialchars(addslashes($admin->get_post('page_code')));
-$parent = $admin->get_post_escaped('parent');
+$parent = ($admin->get_post_escaped('parent') == '0') ? null : $admin->get_post_escaped('parent');
 $visibility = $admin->get_post_escaped('visibility');
 $template = $admin->get_post_escaped('template');
 $target = $admin->get_post_escaped('target');
@@ -131,18 +131,18 @@ if($parent != $old_parent)
 }
 
 // Work out level and root parent
-if ($parent!='0')
+if (!is_null($parent))
 {
 	$level = level_count($parent)+1;
 	$root_parent = root_parent($parent);
 }
 else {
 	$level = '0';
-	$root_parent = '0';
+	$root_parent = $page_id;
 }
 
 // Work-out what the link should be
-if($parent == '0')
+if(is_null($parent))
 {
 	$link = '/'.page_filename($page_link);
 	// rename menu titles: index && intro to prevent clashes with intro page feature and WB core file /pages/index.php
@@ -178,7 +178,7 @@ if($get_same_page->numRows() > 0)
 }
 
 // Update page with new order
-$sql = 'UPDATE `'.TABLE_PREFIX.'pages` SET `parent`='.$parent.', `position`='.$position.' WHERE `page_id`='.$page_id.'';
+$sql = 'UPDATE `'.TABLE_PREFIX.'pages` SET `parent`= ' . ((is_null($parent)) ? 'NULL' : $parent) . ' , `position`='.$position.' WHERE `page_id`='.$page_id.'';
 $database->query($sql);
 
 // Get page trail
@@ -186,13 +186,13 @@ $page_trail = get_page_trail($page_id);
 
 // Update page settings in the pages table
 $sql  = 'UPDATE `'.TABLE_PREFIX.'pages` SET ';
-$sql .= '`parent` = '.$parent.', ';
+$sql .= '`parent` = ' . ((is_null($parent)) ? 'NULL' : $parent) . ', ';
 $sql .= '`page_title` = "'.$page_title.'", ';
 $sql .= '`menu_title` = "'.$menu_title.'", ';
 $sql .= '`menu` = '.$menu.', ';
 $sql .= '`level` = '.$level.', ';
 $sql .= '`page_trail` = "'.$page_trail.'", ';
-$sql .= '`root_parent` = '.$root_parent.', ';
+$sql .= '`root_parent` = '.((is_null($root_parent)) ? 'NULL' : $root_parent).', ';
 $sql .= '`link` = "'.$link.'", ';
 $sql .= '`template` = "'.$template.'", ';
 $sql .= '`target` = "'.$target.'", ';
@@ -282,7 +282,7 @@ function fix_page_trail($parent,$root_parent)
 	// Get objects and vars from outside this function
 	global $admin, $template, $database, $TEXT, $MESSAGE;
 	// Get page list from database
-	$query = "SELECT page_id FROM ".TABLE_PREFIX."pages WHERE parent = '$parent'";
+	$query = "SELECT page_id FROM ".TABLE_PREFIX."pages WHERE parent " . ((is_null($parent)) ? 'IS NULL' : "= '$parent'");
 	$get_pages = $database->query($query);
 	// Insert values into main page list
 	if($get_pages->numRows() > 0)
@@ -291,7 +291,7 @@ function fix_page_trail($parent,$root_parent)
         {
 			// Fix page trail
 
-			$database->query("UPDATE ".TABLE_PREFIX."pages SET ".($root_parent != 0 ?"root_parent = '$root_parent', ":"")." page_trail = '".get_page_trail($page['page_id'])."' WHERE page_id = '".$page['page_id']."'");
+			$database->query("UPDATE ".TABLE_PREFIX."pages SET ".((is_null($root_parent)) ? "root_parent = '$root_parent', " : "")." page_trail = '".get_page_trail($page['page_id'])."' WHERE page_id = '".$page['page_id']."'");
 			// Run this query on subs
 			fix_page_trail($page['page_id'],$root_parent);
 		}

@@ -166,7 +166,7 @@ if($admin->get_permission('pages_add_l0') == true) {
   );
   $template->parse('page_list2', 'page_list_block2', true);
 }
-parent_list(null);
+parent_list();
 
 // Explode module permissions
 $module_permissions = $_SESSION['MODULE_PERMISSIONS'];
@@ -241,7 +241,7 @@ $admin->print_footer();
 
 
 // Parent page list
-function parent_list($parent)
+function parent_list($parent = null)
 {
   global $admin, $database, $template, $field_set;
 

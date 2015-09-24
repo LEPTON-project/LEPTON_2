@@ -60,7 +60,7 @@ else
 		{
 			return $parent;
 		} //$level == 1
-		elseif ( $parent == 0 )
+		elseif (is_null($parent))
 		{
 			return $page_id;
 		} //$parent == 0
