@@ -166,7 +166,7 @@ if($admin->get_permission('pages_add_l0') == true) {
   );
   $template->parse('page_list2', 'page_list_block2', true);
 }
-parent_list(0);
+parent_list();
 
 // Explode module permissions
 $module_permissions = $_SESSION['MODULE_PERMISSIONS'];
@@ -241,13 +241,19 @@ $admin->print_footer();
 
 
 // Parent page list
-function parent_list($parent)
+function parent_list($parent = null)
 {
   global $admin, $database, $template, $field_set;
 
+  if(is_null($parent)){
+    $parent = 'is null';
+  }else{
+    $parent = ' = ' . $parent;
+  }
+
   $admin_user_id = $admin->get_user_id();
 
-  $query = "SELECT `page_id`,`admin_groups`,`admin_users`,`menu_title`,`page_title`,`visibility`,`parent`,`level`,`viewing_groups`,`viewing_users` FROM ".TABLE_PREFIX."pages WHERE parent = '$parent' AND visibility!='deleted' ORDER BY position ASC";
+  $query = "SELECT `page_id`,`admin_groups`,`admin_users`,`menu_title`,`page_title`,`visibility`,`parent`,`level`,`viewing_groups`,`viewing_users` FROM ".TABLE_PREFIX."pages WHERE parent $parent AND visibility!='deleted' ORDER BY position ASC";
   $get_pages = $database->query($query);
   while($page = $get_pages->fetchRow( MYSQL_ASSOC )) {
     if($admin->page_is_visible($page)==false)
@@ -302,7 +308,12 @@ function url_encode($string) {
 	return str_replace($entities, $replacements, rawurlencode($string));
 }
 
-function make_list($parent = 0, &$editable_pages = 0) {
+function make_list($parent = null, &$editable_pages = 0) {
+  if(is_null($parent)){
+      $parent_cond = 'is null';
+  }else{
+      $parent_cond = ' = ' . $parent;
+  }
   // Get objects and vars from outside this function
   global $admin, $database, $TEXT, $MESSAGE, $HEADING, $par;
   $template = new Template(THEME_PATH.'/templates');
@@ -333,7 +344,7 @@ function make_list($parent = 0, &$editable_pages = 0) {
 	}
 
   // Get page list from database
-  $sql = 'SELECT * FROM `'.TABLE_PREFIX.'pages` WHERE `parent` = '.$parent.' ';
+  $sql = 'SELECT * FROM `'.TABLE_PREFIX.'pages` WHERE `parent` '.$parent_cond.' ';
   $sql .= (PAGE_TRASH != 'inline') ?  'AND `visibility` != \'deleted\' ' : ' ';
   $sql .= 'ORDER BY `position` ASC';
   $get_pages = $database->query($sql);
@@ -560,7 +571,7 @@ function print_list_page(){
     $par['num_subs'] = 1;
 
     $editable_pages = 0;
-    $loop = make_list(0, $editable_pages);
+    $loop = make_list(null, $editable_pages);
     $template->set_var('PAGES_LIST_LOOP', $loop);
     $template->parse('pages_list', 'page_list_block');
     $template->parse('main', 'main_block');

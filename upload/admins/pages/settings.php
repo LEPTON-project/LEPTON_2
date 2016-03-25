@@ -272,11 +272,15 @@ if($results_array['visibility'] == 'private' OR $results_array['visibility'] == 
 }
 
 // Parent page list
-function parent_list($parent)
+function parent_list($parent = null)
 {
 	global $admin, $database, $template, $results_array,$field_set;
 
-    $sql = 'SELECT * FROM `'.TABLE_PREFIX.'pages` WHERE `parent` = '.$parent.' ORDER BY `position` ASC';
+	if(is_null($parent)){
+		$sql = 'SELECT * FROM `'.TABLE_PREFIX.'pages` WHERE `parent` IS NULL ORDER BY `position` ASC';
+	}else{
+		$sql = 'SELECT * FROM `'.TABLE_PREFIX.'pages` WHERE `parent` = '.$parent.' ORDER BY `position` ASC';
+	}
     $get_pages = $database->query($sql);
 
 	while(false !== ($page = $get_pages->fetchRow( MYSQL_ASSOC ) ) )
@@ -351,7 +355,7 @@ function parent_list($parent)
 
 $template->set_block('main_block', 'page_list_block2', 'page_list2');
 if($admin->get_permission('pages_add_l0') == true OR $results_array['level'] == 0) {
-	if($results_array['parent'] == 0)
+	if(is_null($results_array['parent']))
     {
 		$selected = ' selected="selected"';
 	} else { 
@@ -365,7 +369,7 @@ if($admin->get_permission('pages_add_l0') == true OR $results_array['level'] == 
 	);
 	$template->parse('page_list2', 'page_list_block2', true);
 }
-parent_list(0);
+parent_list();
 
 if($modified_ts == 'Unknown')
 {

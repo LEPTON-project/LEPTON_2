@@ -546,8 +546,8 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 	// Try installing tables
 	// Pages table
 	$pages = 'CREATE TABLE `'.TABLE_PREFIX.'pages` ( `page_id` INT NOT NULL auto_increment,'
-	       . ' `parent` INT NOT NULL DEFAULT \'0\','
-	       . ' `root_parent` INT NOT NULL DEFAULT \'0\','
+	       . ' `parent` INT DEFAULT NULL,'
+	       . ' `root_parent` INT DEFAULT NULL,'
 	       . ' `level` INT NOT NULL DEFAULT \'0\','
 	       . ' `link` TEXT NOT NULL,'
 	       . ' `target` VARCHAR( 7 ) NOT NULL DEFAULT \'\' ,'
@@ -561,7 +561,7 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 	       . ' `position` INT NOT NULL DEFAULT \'0\','
 	       . ' `menu` INT NOT NULL DEFAULT \'0\','
 	       . ' `language` VARCHAR( 5 ) NOT NULL DEFAULT \'\' ,'
-	       . ' `page_code` VARCHAR( 100 ) NOT NULL DEFAULT \'\' ,'         
+	       . ' `page_code` VARCHAR( 100 ) NOT NULL DEFAULT \'\' ,'
 	       . ' `searching` INT NOT NULL DEFAULT \'0\','
 	       . ' `admin_groups` TEXT NOT NULL ,'
 	       . ' `admin_users` TEXT NOT NULL ,'
@@ -576,7 +576,7 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 
 	// Sections table
 	$sections = 'CREATE TABLE `'.TABLE_PREFIX.'sections` ( `section_id` INT NOT NULL auto_increment,'
-	       . ' `page_id` INT NOT NULL DEFAULT \'0\','
+	       . ' `page_id` INT DEFAULT NULL,'
 	       . ' `position` INT NOT NULL DEFAULT \'0\','
 	       . ' `module` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
 	       . ' `block` VARCHAR( 255 ) NOT NULL DEFAULT \'\' ,'
@@ -656,7 +656,7 @@ $database->query("ALTER DATABASE `".DB_NAME."` DEFAULT CHARACTER SET utf8 COLLAT
 
 	// Users table
 	$users = 'CREATE TABLE `'.TABLE_PREFIX.'users` ( `user_id` INT NOT NULL auto_increment,'
-	       . ' `group_id` INT NOT NULL DEFAULT \'0\','
+	       . ' `group_id` INT DEFAULT NULL,'
 	       . ' `groups_id` VARCHAR( 255 ) NOT NULL DEFAULT \'0\','
 	       . ' `active` INT NOT NULL DEFAULT \'0\','
 		   . ' `statusflags` INT NOT NULL DEFAULT \'6\','

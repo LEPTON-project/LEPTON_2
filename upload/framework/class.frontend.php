@@ -107,7 +107,7 @@ class frontend extends wb
 		$table_p          = TABLE_PREFIX . 'pages';
 		$table_s          = TABLE_PREFIX . 'sections';
 		$now              = time();
-		$query_default    = "SELECT `p`.`page_id`, `link` FROM `$table_p` AS `p` INNER JOIN `$table_s` USING(`page_id`) WHERE `parent` = '0' 
+		$query_default    = "SELECT `p`.`page_id`, `link` FROM `$table_p` AS `p` INNER JOIN `$table_s` USING(`page_id`) WHERE `parent` is null 
 		AND `visibility` = 'public'	AND (($now>=`publ_start` OR `publ_start`=0) AND ($now<=`publ_end` OR `publ_end`=0))	$this->sql_where_language	ORDER BY `p`.`position` ASC LIMIT 1";
 		$get_default      = $database->query( $query_default );
 		$default_num_rows = $get_default->numRows();
